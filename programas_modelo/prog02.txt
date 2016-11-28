@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+#define TOLER 1.0E-12
+
+double fx2(double x)
+{
+   return (0.05*pow(x,3) - 0.4*pow(x,2) + 3*sin(x));
+}
+
+int bissecao(double a, double b, int interMax, int *interacoes, double *raiz)
+{
+   double r, fa, fb, dx, x, fx;
+   int inter, condErro;
+
+   fa = fx2(a);
+   fb = fx2(b);
+   dx = b - a;
+   x = (b + a)/2.0;
+   fx = fx2(x);
+   inter = 0;
+
+   while(dx > TOLER && fabs(fx) > TOLER && inter < interMax) {
+      x = (b + a)/2.0;
+      fx = fx2(x);
+      if(fx*fa < 0) {
+         b = x;
+         fb = fx;
+      }
+      else {
+         a = x;
+         fa = fx;
+      }
+      dx = dx/2;
+      inter++;
+   }
+   printf("%.16f\n", fx);
+   *interacoes = inter;
+   *raiz = x;
+   r = fa*fb;
+   if(r < 0) {
+      condErro = 0;
+   }
+   else {
+      condErro = 1;
+   }
+
+   return condErro;
+
+}
+
+int main()
+{
+	double a, b, raiz;
+	int inter, interMax, condErro;
+
+	interMax = 50;
+	a = -1;
+	b = 2;
+
+	printf("Programa para achar a raiz da funcao, utilizando o metodo da bissecao\n");
+
+	condErro = bissecao(a, b, interMax, &inter, &raiz);
+
+	if(condErro) {
+		printf("Erro ao achar o ponto\n");
+		printf("ponto: %f\n", raiz);
+      printf("Numero de interacoes realizadas: %d\n", inter);
+	}
+	else {
+		printf("ponto: %.16f\n", raiz);
+      printf("Numero de interacoes realizadas: %d\n", inter);
+	}
+
+}
